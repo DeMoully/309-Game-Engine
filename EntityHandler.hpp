@@ -10,6 +10,9 @@
 #include <functional>
 #include <memory>
 
+// TODO: tests
+// TODO: documentation
+
 namespace sfext
 {
 	class EntityHandler : public sf::Drawable

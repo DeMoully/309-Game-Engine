@@ -12,6 +12,10 @@
 #include "Tweener.hpp"
 #include "LightSource.hpp"
 
+// TODO: rewrite this in its entirety. Inherit from RenderTexture and Drawable so that things can more easily be drawn to this.
+// TODO: write documentation. There isn't any at the moment and very little of this is clear just from looking at it.
+// TODO: redesign how LightSources are stored and allocated. There has to be a better way to do this.
+
 namespace sfext
 {
 	class LightMap : public sf::Drawable

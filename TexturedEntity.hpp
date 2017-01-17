@@ -9,6 +9,9 @@
 #include "Entity.hpp"
 #include "VectorMath.hpp"
 
+// TODO: tests
+// TODO: documentation
+
 namespace sfext
 {
 	class TexturedEntity : public Entity

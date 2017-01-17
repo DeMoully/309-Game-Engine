@@ -12,6 +12,9 @@
 
 #include "FontHandler.hpp"
 
+// TODO: tests
+// TODO: documentation
+
 namespace sfext
 {
 	class TextHandler final

@@ -2,6 +2,9 @@
 
 #include "GuiBase.hpp"
 
+// TODO: tests
+// TODO: documentation
+
 namespace sfext
 {
 	class Button : public GuiBase, public ClickableComponent, public DimensionalComponent, public ActionComponent
@@ -11,7 +14,6 @@ namespace sfext
 		// Constructors
 		Button(const sf::Vector2f & position, const sf::Vector2f & dimensions, sf::Mouse::Button button) : ClickableComponent(button), DimensionalComponent(position, dimensions)
 		{
-
 		}
 		// Virtual Destructor
 		virtual ~Button()
@@ -21,9 +23,7 @@ namespace sfext
 		virtual void handleClick(const sf::Vector2f & mousePosition)
 		{
 			if (clicked(mousePosition))
-			{
 				call();
-			}
 		}
 		virtual void draw(sf::RenderTarget & target, sf::RenderStates states = sf::RenderStates::Default) const
 		{

@@ -1,7 +1,3 @@
-// UPDATE FORMATTING
-// ADD NULLPTR CHECKS
-// MAKE IT LESS BAD
-
 #pragma once
 
 #include <string>
@@ -20,6 +16,9 @@
 #include <SFML/Graphics/Shape.hpp>
 
 #include "FontHandler.hpp"
+
+// TODO: tests
+// TODO: documentation
 
 namespace sfext
 {

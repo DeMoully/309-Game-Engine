@@ -6,6 +6,9 @@
 #include <numeric>
 #include <list>
 
+// TODO: tests
+// TODO: documentation
+
 namespace sfext
 {
 	std::string convertToLowerCase(const std::string & str)

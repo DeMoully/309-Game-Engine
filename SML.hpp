@@ -12,6 +12,9 @@
 
 #include <SFML/System/String.hpp>
 
+// TODO: tests
+// TODO: documentation
+
 namespace sfext
 {
 	typedef std::map<sf::String, std::map<sf::String, sf::String>> SMLValues;

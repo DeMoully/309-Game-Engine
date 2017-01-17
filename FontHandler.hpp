@@ -5,6 +5,9 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/System/String.hpp>
 
+// TODO: tests
+// TODO: documentation
+
 namespace sfext
 {
 	class FontHandler final

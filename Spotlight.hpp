@@ -11,6 +11,9 @@
 #include "Tweener.hpp"
 #include "LightSource.hpp"
 
+// TODO: tests
+// TODO: documentation
+
 namespace sfext
 {
 	class Spotlight : public LightSource

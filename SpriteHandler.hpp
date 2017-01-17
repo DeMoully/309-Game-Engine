@@ -9,6 +9,9 @@
 
 #include "TextureHandler.hpp"
 
+// TODO: tests
+// TODO: documentation
+
 namespace sfext
 {
 	typedef std::map<sf::String, sf::Sprite>::iterator               SpriteIterator;

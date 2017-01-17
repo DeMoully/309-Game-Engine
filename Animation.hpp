@@ -6,9 +6,18 @@
 
 #include "FlexibleClock.hpp"
 
+// The Animation class provides access to an animated sprite. Various properties can be changed to give
+// the programmer exact control over the animation process.
+
+// Animations are drawable, just like any other SFML drawable entity.
+
+// TODO: make this adhere to the new naming conventions
+// TODO: documentation
+// TODO: testing
+
 namespace sfext
 {
-	class Animation final
+	class Animation final : public sf::Drawable
 	{
 	private:
 		sf::Sprite         spriteSheet;

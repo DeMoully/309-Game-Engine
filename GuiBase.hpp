@@ -10,6 +10,9 @@
 
 #include <memory>
 
+// TODO: tests
+// TODO: documentation
+
 namespace sfext
 {
 	class GuiBase : public sf::Drawable

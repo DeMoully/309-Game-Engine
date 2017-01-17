@@ -3,6 +3,9 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
 
+// TODO: tests
+// TODO: documentation
+
 namespace sfext
 {
 	class FlexibleClock final

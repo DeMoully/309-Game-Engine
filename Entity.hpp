@@ -8,6 +8,9 @@
 #include "Collidable.hpp"
 #include "VectorMath.hpp"
 
+// TODO: tests
+// TODO: documentation
+
 namespace sfext
 {
 	class Entity : public sf::Drawable

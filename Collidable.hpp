@@ -5,6 +5,9 @@
 
 #include "VectorMath.hpp"
 
+// TODO: tests
+// TODO: documentation
+
 namespace sfext
 {
 	class Collidable

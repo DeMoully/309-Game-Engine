@@ -6,6 +6,9 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/System/Vector2.hpp>
 
+// TODO: tests
+// TODO: documentation
+
 namespace sfext
 {
 	class LightSource : public sf::Drawable

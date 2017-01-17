@@ -4,7 +4,9 @@
 
 #include <map>
 #include <functional>
-#include <cassert>
+
+// TODO: tests
+// TODO: documentation
 
 namespace sfext
 {
@@ -16,8 +18,10 @@ namespace sfext
 		// Accessors
 		std::function<void ()> getFunction(sf::Keyboard::Key key) const
 		{
-			assert(("The requested key has no bound function", hasFunctionBoundToKey(key)));
-			return functions.at(key);
+			if (hasFunctionBoundToKey(key))
+				return functions.at(key);
+			else
+				throw std::invalid_argument("The key with index <" + std::to_string(key) + "> has no bound function.");
 		}
 		// Mutators
 		void addFunction   (sf::Keyboard::Key key, const std::function<void ()> & function)
@@ -40,12 +44,8 @@ namespace sfext
 		void checkForInput        () const
 		{
 			for (const auto & pair : functions)
-			{
 				if (sf::Keyboard::isKeyPressed(pair.first))
-				{
 					pair.second();
-				}
-			}
 		}
 	};
 }

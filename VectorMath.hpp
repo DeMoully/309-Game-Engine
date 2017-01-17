@@ -5,6 +5,9 @@
 
 #include <cmath>
 
+// TODO: tests
+// TODO: documentation
+
 namespace sfext
 {
 	float dotProduct(const sf::Vector2f & lhs, const sf::Vector2f & rhs)

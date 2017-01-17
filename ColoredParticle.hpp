@@ -11,6 +11,9 @@
 #include <SFML\Graphics\Drawable.hpp>
 #include <SFML\Graphics\RenderTarget.hpp>
 
+// TODO: decide on where this class will go
+//		 will we keep this functionality or move it to the base particle class?
+
 namespace sfext
 {
 	class ColoredParticle : public Particle

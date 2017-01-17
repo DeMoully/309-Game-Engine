@@ -6,6 +6,9 @@
 #include "Random.hpp"
 #include "FlexibleClock.hpp"
 
+// TODO: tests
+// TODO: documentation
+
 namespace sfext
 {
 	enum class TweenerStyle

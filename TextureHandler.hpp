@@ -1,10 +1,12 @@
 #pragma once
 
 #include <map>
-#include <cassert>
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/String.hpp>
+
+// TODO: tests
+// TODO: documentation
 
 namespace sfext
 {

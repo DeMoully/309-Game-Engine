@@ -1,7 +1,5 @@
 #pragma once
 
-// TODO: write more detailed documentation
-
 #include <map>
 #include <string>
 
@@ -11,6 +9,15 @@
 
 #include "SpriteHandler.hpp"
 #include "Animation.hpp"
+
+// The AnimationHandler class provides a convenient way of storing and accessing Animations.
+
+// Animations are stored in a map of Animation names to Animations. Resources that are used
+// by the Animations such as Sprite Sheets and their associated Textures are also stored.
+
+// TODO: documentation
+// TODO: testing
+// TODO: make it easier to interface with the LightMap class
 
 namespace sfext
 {
