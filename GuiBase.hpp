@@ -11,10 +11,12 @@
 #include <memory>
 
 // TODO: tests
-// TODO: documentation
 
 namespace sfext
 {
+	// This is the base class from which all GUI elements are developed
+	// Provides only basic functionality that is expected to be present in any
+	// GUI element
 	class GuiBase : public sf::Drawable
 	{
 	protected:
@@ -31,9 +33,12 @@ namespace sfext
 		virtual void draw(sf::RenderTarget & target, sf::RenderStates states = sf::RenderStates::Default) const = 0;
 		virtual void update()
 		{
+			// Any changes that need to be made to the GUI element on a frame-by-frame basis should
+			// be made here.
 		}
 	};
 
+	// This component provides spatial data for a GUI element
 	class DimensionalComponent
 	{
 	protected:
@@ -81,6 +86,11 @@ namespace sfext
 		}
 	};
 
+	// This component provides texturing data for a GUI element
+	// The texture that this refers to must stay alive for as long
+	// as this expects to be able to use it
+	// Vertices are mutable to allow for updateVertices to be called in functions such as draw
+	// This might be changed if possible
 	class TextureComponent
 	{
 	protected:
@@ -128,6 +138,7 @@ namespace sfext
 		virtual void updateVertices() const = 0;
 	};
 
+	// This component provides animation data for a GUI element
 	class AnimationComponent
 	{
 	protected:
@@ -156,6 +167,8 @@ namespace sfext
 		}
 	};
 
+	// This component allows a callback function to be bound to a GUI element (a button, for example)
+	// Actions can be limited by the delay member
 	class ActionComponent
 	{
 	protected:
@@ -207,6 +220,7 @@ namespace sfext
 		}
 	};
 
+	// This component allows a GUI element to be clicked
 	class ClickableComponent
 	{
 	protected:
@@ -238,6 +252,7 @@ namespace sfext
 		virtual bool mousedOver(const sf::Vector2f & mousePosition) const = 0;
 	};
 
+	// This component allows for a GUI element to display text
 	class TextComponent : public DimensionalComponent
 	{
 	protected:
@@ -263,9 +278,7 @@ namespace sfext
 			sf::Vector2f offset = position - m_position;
 			m_position = position;
 			for (unsigned int i = 0; i < m_textVertices.getVertexCount(); ++i)
-			{
 				m_textVertices[i].position += offset;
-			}
 		}
 		virtual void setDimensions(const sf::Vector2f & dimensions)
 		{
@@ -281,9 +294,7 @@ namespace sfext
 		{
 			m_textColor = color;
 			for (unsigned int i = 0; i < m_textVertices.getVertexCount(); ++i)
-			{
 				m_textVertices[i].color = m_textColor;
-			}
 		}
 		void setCharacterSize(unsigned int characterSize)
 		{
@@ -300,13 +311,12 @@ namespace sfext
 		{
 			// ===============================================================================================================================
 			// |This function is based off of the updateGeometry function of the sf::Text class contained in SFML (written by Laurent Gomila)|
+			// |              For more information, see the documentation for this function's counterpart on the SFML website.               |
 			// ===============================================================================================================================
 			m_textVertices.clear();
 			
 			if (m_font == nullptr || m_text.isEmpty())
-			{
 				return;
-			}
 
 			float horizontal = static_cast<float>(m_font->getGlyph(' ', m_characterSize, false).advance);
 			float vertical = static_cast<float>(m_font->getLineSpacing(m_characterSize));

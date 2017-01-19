@@ -10,6 +10,11 @@
 
 namespace sfext
 {
+	const float PI_F = 3.141592653f;
+	const float TWO_PI_F = 2.f * PI_F;
+	const double PI = 3.141592653;
+	const double TWO_PI = 2.0 * PI;
+
 	float dotProduct(const sf::Vector2f & lhs, const sf::Vector2f & rhs)
 	{
 		return lhs.x * rhs.x + lhs.y * rhs.y;
@@ -183,13 +188,11 @@ namespace sfext
 	
 	float degreesToRadians(float degrees)
 	{
-		const float pi = 3.14159265f;
-		return pi * degrees / 180.f;
+		return PI_F * degrees / 180.f;
 	}
 	float radiansToDegrees(float radians)
 	{
-		const float pi = 3.14159265f;
-		return radians * 180.f / pi;
+		return radians * 180.f / PI_F;
 	}
 
 	template <class T>

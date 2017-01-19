@@ -44,15 +44,13 @@ namespace sfext
 	sf::Vector2f randomVector2f(const sf::Vector2f & center, float radius)
 	{
 		// Gives a circular distribution for an sf::Vector2f
-		static const float twoPi = 2.f * 3.141592653f;
-		float theta = static_cast<float>(randomReal(0, twoPi));
+		float theta = static_cast<float>(randomReal(0, TWO_PI_F));
 		return sf::Vector2f(center.x + radius * std::cos(theta), center.y + radius * std::sin(theta));
 	}
 	sf::Vector2f randomVector2f(const sf::Vector2f & center, float xRadius, float yRadius)
 	{
 		// Gives an elliptical distribution for an sf::Vector2f
-		static const float twoPi = 2.f * 3.141592653f;
-		float theta = static_cast<float>(randomReal(0, twoPi));
+		float theta = static_cast<float>(randomReal(0, TWO_PI_F));
 		return sf::Vector2f(center.x + xRadius * std::cos(theta), center.y + yRadius * std::sin(theta));
 	}
 	sf::Vector2f randomVector2fWithinCircle(const sf::Vector2f & center, float radius)

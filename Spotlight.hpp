@@ -65,23 +65,22 @@ namespace sfext
 		void setLevelOfDetail(std::size_t LOD)
 		{
 			if (LOD >= 4)
-			{
 				levelOfDetail = LOD;
-			}
+			else
+				throw std::invalid_argument("Invalid radius <" + std::to_string(LOD) + ">. Must be at least 4.");
 		}
 		// Utilities
 		void updateVertices() const
 		{
-			const float twoPi = 2.f * 3.14159265358979f;
-			float rad = radius.get();
 			if (vertices.getVertexCount() != levelOfDetail)
-			{
 				vertices.resize(levelOfDetail);
-			}
+
+			float rad = radius.get();
+
 			vertices[0] = sf::Vertex(position, centerColor, position);
 			for (unsigned int i = 1; i < levelOfDetail; ++i)
 			{
-				float theta = twoPi * i / (levelOfDetail - 2);
+				float theta = TWO_PI_F * i / (levelOfDetail - 2);
 				sf::Vector2f pos = position + rad * unitVector(theta);
 				vertices[i] = sf::Vertex(pos, outerColor, pos);
 			}
