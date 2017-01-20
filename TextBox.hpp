@@ -57,7 +57,7 @@ namespace sfext
 			
 			if (m_font != nullptr)
 			{
-				for (int i = 0; i < m_textVertices.getVertexCount(); ++i)
+				for (unsigned int i = 0; i < m_textVertices.getVertexCount(); ++i)
 					vertices[8 + i] = m_textVertices[i];
 				states.texture = &m_font->getTexture(m_characterSize);
 			}

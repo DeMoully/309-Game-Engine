@@ -16,21 +16,26 @@ namespace sfext
 	class Entity : public sf::Drawable
 	{
 	protected:
-		Collidable collidable;
-		sf::Vector2f velocity;
+		Collidable m_collidable = Collidable();
+		sf::Vector2f m_velocity = sf::Vector2f();
+		sf::VertexArray m_vertices = sf::VertexArray(sf::PrimitiveType::Quads, 4U);
 	public:
 		// Constructors
-		Entity         () : collidable(0.f, 0.f, 0.f, 0.f), velocity(0.f, 0.f)
+		Entity         ()
 		{
+			updateVertices();
 		}
-		explicit Entity(const Collidable & coll, const sf::Vector2f & vel = sf::Vector2f(0.f, 0.f)) : collidable(coll), velocity(vel)
+		explicit Entity(const Collidable & collidable, const sf::Vector2f & velocity = sf::Vector2f()) : m_collidable(collidable), m_velocity(velocity)
 		{
+			updateVertices();
 		}
-		Entity         (const sf::Vector2f & position, const sf::Vector2f & dimensions, const sf::Vector2f & vel) : collidable(position, dimensions), velocity(vel)
+		Entity         (const sf::Vector2f & position, const sf::Vector2f & dimensions, const sf::Vector2f & velocity = sf::Vector2f()) : m_collidable(position, dimensions), m_velocity(velocity)
 		{
+			updateVertices();
 		}
-		Entity         (float x, float y, float xDimensions, float yDimensions, sf::Vector2f & vel) : collidable(x, y, xDimensions, yDimensions), velocity(vel)
+		Entity         (float x, float y, float width, float height, sf::Vector2f & velocity = sf::Vector2f()) : m_collidable(x, y, width, height), m_velocity(velocity)
 		{
+			updateVertices();
 		}
 		// Virtual Destructor
 		virtual ~Entity()
@@ -39,149 +44,159 @@ namespace sfext
 		// Accessors
 		Collidable    getCollidable () const
 		{
-			return collidable;
+			return m_collidable;
 		}
 		sf::Vector2f  getVelocity   () const
 		{
-			return velocity;
+			return m_velocity;
 		}
 		sf::Vector2f  getPosition   () const
 		{
-			return collidable.getPosition();
+			return m_collidable.getPosition();
 		}
 		sf::Vector2f  getDimensions () const
 		{
-			return collidable.getDimensions();
+			return m_collidable.getDimensions();
 		}
 		sf::Vector2f  getCenter     () const
 		{
-			return collidable.getCenter();
+			return m_collidable.getCenter();
 		}
 		sf::FloatRect getBoundingBox() const
 		{
-			return collidable.getBoundingBox();
+			return m_collidable.getBoundingBox();
 		}
 		// Mutators
 		void setVelocity  (const sf::Vector2f & vel)
 		{
-			velocity = vel;
+			m_velocity = vel;
 		}
 		void setVelocity  (float x, float y)
 		{
-			velocity.x = x;
-			velocity.y = y;
+			m_velocity.x = x;
+			m_velocity.y = y;
 		}
 		void setPosition  (const sf::Vector2f & position)
 		{
-			collidable.setPosition(position);
+			m_collidable.setPosition(position);
+			updateVertices();
 		}
 		void setPosition  (float x, float y)
 		{
-			collidable.setPosition(x, y);
+			m_collidable.setPosition(x, y);
+			updateVertices();
 		}
 		void setDimensions(const sf::Vector2f & dimensions)
 		{
-			collidable.setDimensions(dimensions);
+			m_collidable.setDimensions(dimensions);
+			updateVertices();
 		}
 		void setDimensions(float x, float y)
 		{
-			collidable.setDimensions(x, y);
+			m_collidable.setDimensions(x, y);
+			updateVertices();
 		}
 		void scale        (float factor)
 		{
-			collidable.scale(factor);
+			m_collidable.scale(factor);
+			updateVertices();
 		}
 		void scale        (float x, float y)
 		{
-			collidable.scale(x, y);
+			m_collidable.scale(x, y);
+			updateVertices();
 		}
 		void scale        (const sf::Vector2f & factor)
 		{
-			collidable.scale(factor);
+			m_collidable.scale(factor);
+			updateVertices();
 		}
 		// Utilities
 		virtual bool intersects        (const Entity & other) const
 		{
-			return collidable.intersects(other.getCollidable());
+			return m_collidable.intersects(other.getCollidable());
 		}
 		virtual void handleIntersection(const Entity & other)
 		{
+			// TODO: rewrite this with SAT
+
 			// Assumes a static Entity for 'other'. This should be used for intersections with terrain, boundaries, etc.
 			// This intersection method is not to be used with two moving entities, as the results are undefined and will often not be what is expected. Use with caution.
 			Collidable otherCollidable = other.getCollidable();
-			sf::Vector2f center = collidable.getCenter();
+			sf::Vector2f center = m_collidable.getCenter();
 			if (intersects(other))
 			{
-				if (velocity.x == 0.f)
+				if (m_velocity.x == 0.f)
 				{
-					if (velocity.y < 0.f) // Object is moving straight up
+					if (m_velocity.y < 0.f) // Object is moving straight up
 					{
-						collidable.move(0.f, otherCollidable.getPosition().y + otherCollidable.getDimensions().y - getPosition().y);
+						m_collidable.move(0.f, otherCollidable.getPosition().y + otherCollidable.getDimensions().y - getPosition().y);
 					}
-					else if (velocity.y > 0.f) // Object is moving straight down
+					else if (m_velocity.y > 0.f) // Object is moving straight down
 					{
-						collidable.move(0.f, otherCollidable.getPosition().y - getPosition().y - getDimensions().y);
+						m_collidable.move(0.f, otherCollidable.getPosition().y - getPosition().y - getDimensions().y);
 					}
-					velocity.y = 0.f;
+					m_velocity.y = 0.f;
 					return;
 				}
-				else if (velocity.y == 0.f)
+				else if (m_velocity.y == 0.f)
 				{
-					if (velocity.x < 0.f) // Object is moving straight to the left
+					if (m_velocity.x < 0.f) // Object is moving straight to the left
 					{
-						collidable.move(otherCollidable.getPosition().x + otherCollidable.getDimensions().x - getPosition().x, 0.f);
+						m_collidable.move(otherCollidable.getPosition().x + otherCollidable.getDimensions().x - getPosition().x, 0.f);
 					}
-					else if (velocity.x > 0.f) // Object is moving straight to the right
+					else if (m_velocity.x > 0.f) // Object is moving straight to the right
 					{
-						collidable.move(otherCollidable.getPosition().x - getPosition().x - getDimensions().x, 0.f);
+						m_collidable.move(otherCollidable.getPosition().x - getPosition().x - getDimensions().x, 0.f);
 					}
-					velocity.x = 0.f;
+					m_velocity.x = 0.f;
 					return;
 				}
 				sf::Vector2f offset(0.f, 0.f);
 				sf::Vector2f ratios(0.f, 0.f);
-				if (velocity.x < 0.f && velocity.y < 0.f)
+				if (m_velocity.x < 0.f && m_velocity.y < 0.f)
 				{
 					offset = getPosition() - otherCollidable.getPosition() - otherCollidable.getDimensions();
-					ratios = sf::Vector2f(offset.x / velocity.x, offset.y / velocity.y);
+					ratios = sf::Vector2f(offset.x / m_velocity.x, offset.y / m_velocity.y);
 				}
-				else if (velocity.x < 0.f && velocity.y > 0.f)
+				else if (m_velocity.x < 0.f && m_velocity.y > 0.f)
 				{
 					offset.x = getPosition().x - otherCollidable.getPosition().x - otherCollidable.getDimensions().x;
 					offset.y = getPosition().y + getDimensions().y - otherCollidable.getPosition().y;
-					ratios = sf::Vector2f(offset.x / velocity.x, offset.y / velocity.y);
+					ratios = sf::Vector2f(offset.x / m_velocity.x, offset.y / m_velocity.y);
 				}
-				else if (velocity.x > 0.f && velocity.y < 0.f)
+				else if (m_velocity.x > 0.f && m_velocity.y < 0.f)
 				{
 					offset.x = getPosition().x + getDimensions().x - otherCollidable.getPosition().x;
 					offset.y = getPosition().y - otherCollidable.getPosition().y - otherCollidable.getDimensions().y;
-					ratios = sf::Vector2f(offset.x / velocity.x, offset.y / velocity.y);
+					ratios = sf::Vector2f(offset.x / m_velocity.x, offset.y / m_velocity.y);
 				}
-				else if (velocity.x > 0.f && velocity.y > 0.f)
+				else if (m_velocity.x > 0.f && m_velocity.y > 0.f)
 				{
 					offset = getPosition() + getDimensions() - otherCollidable.getPosition();
-					ratios = sf::Vector2f(offset.x / velocity.x, offset.y / velocity.y);
+					ratios = sf::Vector2f(offset.x / m_velocity.x, offset.y / m_velocity.y);
 				}
 				if (ratios.y < ratios.x)
 				{
-					collidable.move(0.f, -ratios.y * velocity.y);
-					velocity.y = 0.f;
+					m_collidable.move(0.f, -ratios.y * m_velocity.y);
+					m_velocity.y = 0.f;
 				}
 				else if (ratios.x < ratios.y)
 				{
-					collidable.move(-ratios.x * velocity.x, 0.f);
-					velocity.x = 0.f;
+					m_collidable.move(-ratios.x * m_velocity.x, 0.f);
+					m_velocity.x = 0.f;
 				}
 				else
 				{
-					collidable.move(-ratios.x * velocity.x, -ratios.y * velocity.y);
-					velocity = sf::Vector2f(0.f, 0.f);
+					m_collidable.move(-ratios.x * m_velocity.x, -ratios.y * m_velocity.y);
+					m_velocity = sf::Vector2f(0.f, 0.f);
 				}
 			}
+			updateVertices();
 		}
 		virtual bool containsPoint     (const sf::Vector2f & point) const
 		{
-			return collidable.containsPoint(point);
+			return m_collidable.containsPoint(point);
 		}
 		virtual bool containsPoint     (float x, float y) const
 		{
@@ -189,24 +204,29 @@ namespace sfext
 		}
 		virtual void accelerate        (sf::Time elapsed, const sf::Vector2f & force)
 		{
-			velocity += force * elapsed.asSeconds();
+			m_velocity += force * elapsed.asSeconds();
 		}
 		virtual void move              (sf::Time elapsed)
 		{
-			collidable.move(velocity * elapsed.asSeconds());
+			m_collidable.move(m_velocity * elapsed.asSeconds());
+			updateVertices();
 		}
 		virtual void update            (sf::Time elapsed)
 		{
 			move(elapsed);
 		}
+		virtual void updateVertices()
+		{
+			sf::Vector2f position = getPosition();
+			sf::Vector2f dimensions = getDimensions();
+			m_vertices[0] = sf::Vertex(position, sf::Color::White);
+			m_vertices[1] = sf::Vertex(position + sf::Vector2f(dimensions.x, 0.f), sf::Color::White);
+			m_vertices[2] = sf::Vertex(position + dimensions, sf::Color::White);
+			m_vertices[3] = sf::Vertex(position + sf::Vector2f(0.f, dimensions.y), sf::Color::White);
+		}
 		virtual void draw              (sf::RenderTarget & target, sf::RenderStates states = sf::RenderStates::Default) const
 		{
-			static sf::VertexArray vertices = sf::VertexArray(sf::Quads, 4);
-			vertices[0] = sf::Vertex(collidable.getPosition(), sf::Color::White);
-			vertices[1] = sf::Vertex(collidable.getPosition() + sf::Vector2f(collidable.getDimensions().x, 0.f), sf::Color::White);
-			vertices[2] = sf::Vertex(collidable.getPosition() + collidable.getDimensions(), sf::Color::White);
-			vertices[3] = sf::Vertex(collidable.getPosition() + sf::Vector2f(0.f, collidable.getDimensions().y), sf::Color::White);
-			target.draw(vertices, states);
+			target.draw(m_vertices, states);
 		}
 	};
 

@@ -11,7 +11,6 @@
 
 // Animations are drawable, just like any other SFML drawable entity.
 
-// TODO: make this adhere to the new naming conventions
 // TODO: documentation
 // TODO: testing
 
@@ -20,22 +19,22 @@ namespace sfext
 	class Animation final : public sf::Drawable
 	{
 	private:
-		sf::Sprite         spriteSheet;
-		sf::Vector2f       start;
-		sf::Vector2f       dimensions;
-		sf::Vector2f       offset;
-		sf::Vector2u       rowsAndColumns;
-		FlexibleClock      timer;
-		float              fps;
+		sf::Sprite         m_spriteSheet;
+		sf::Vector2f       m_start;
+		sf::Vector2f       m_dimensions;
+		sf::Vector2f       m_offset;
+		sf::Vector2u       m_frameDistribution;
+		FlexibleClock      m_timer;
+		float              m_fps;
 	public:
 		// Constructors
-		Animation() : start(0.f, 0.f), dimensions(0.f, 0.f), offset(0.f, 0.f), rowsAndColumns(1, 1), fps(24.f)
+		Animation() : m_start(0.f, 0.f), m_dimensions(0.f, 0.f), m_offset(0.f, 0.f), m_frameDistribution(1, 1), m_fps(24.f)
 		{
 		}
-		Animation(const sf::Sprite & sheet, const sf::Vector2f & startPos, const sf::Vector2f & dim, const sf::Vector2f & off, const sf::Vector2u & rowsAndCols, float frameRate = 24.f) : spriteSheet(sheet), start(startPos), dimensions(dim), offset(off), rowsAndColumns(rowsAndCols), fps(frameRate)
+		Animation(const sf::Sprite & sheet, const sf::Vector2f & start, const sf::Vector2f & dimensions, const sf::Vector2f & offset, const sf::Vector2u & frameDistribution, float fps = 24.f) : m_spriteSheet(sheet), m_start(start), m_dimensions(dimensions), m_offset(offset), m_frameDistribution(frameDistribution), m_fps(fps)
 		{
 		}
-		Animation(const Animation & rhs) : spriteSheet(rhs.spriteSheet), start(rhs.start), dimensions(rhs.dimensions), offset(rhs.offset), rowsAndColumns(rhs.rowsAndColumns), timer(rhs.timer), fps(rhs.fps)
+		Animation(const Animation & rhs) : m_spriteSheet(rhs.m_spriteSheet), m_start(rhs.m_start), m_dimensions(rhs.m_dimensions), m_offset(rhs.m_offset), m_frameDistribution(rhs.m_frameDistribution), m_timer(rhs.m_timer), m_fps(rhs.m_fps)
 		{
 		}
 		// Destructor
@@ -45,166 +44,166 @@ namespace sfext
 		// Accessors
 		sf::Vector2f        getPosition      () const
 		{
-			return spriteSheet.getPosition();
+			return m_spriteSheet.getPosition();
 		}
 		const sf::Sprite &  getSpriteSheet   () const
 		{
-			return spriteSheet;
+			return m_spriteSheet;
 		}
 		const sf::Texture * getTexture       () const
 		{
-			return spriteSheet.getTexture();
+			return m_spriteSheet.getTexture();
 		}
 		sf::Vector2f        getStart         () const
 		{
-			return start;
+			return m_start;
 		}
 		sf::Vector2f        getDimensions    () const
 		{
-			return dimensions;
+			return m_dimensions;
 		}
 		sf::Vector2f        getOffset        () const
 		{
-			return offset;
+			return m_offset;
 		}
 		sf::Vector2u        getRowsAndColumns() const
 		{
-			return rowsAndColumns;
+			return m_frameDistribution;
 		}
 		float               getFPS           () const
 		{
-			return fps;
+			return m_fps;
 		}
 		std::size_t         getFrameCount    () const
 		{
-			return rowsAndColumns.x * rowsAndColumns.y;
+			return m_frameDistribution.x * m_frameDistribution.y;
 		}
 		// Mutators
-		void setStart         (const sf::Vector2f & pos)
+		void setStart         (const sf::Vector2f & position)
 		{
-			start = pos;
+			m_start = position;
 		}
 		void setStart         (float x, float y)
 		{
-			start.x = x;
-			start.y = y;
+			m_start.x = x;
+			m_start.y = y;
 		}
-		void setFPS           (float newFPS)
+		void setFPS           (float fps)
 		{
-			fps = newFPS;
+			m_fps = fps;
 		}
-		void setPosition      (const sf::Vector2f & pos)
+		void setPosition      (const sf::Vector2f & position)
 		{
-			spriteSheet.setPosition(pos);
+			m_spriteSheet.setPosition(position);
 		}
 		void setPosition      (float x, float y)
 		{
-			spriteSheet.setPosition(x, y);
+			m_spriteSheet.setPosition(x, y);
 		}
-		void setDimensions    (const sf::Vector2f & dim)
+		void setDimensions    (const sf::Vector2f & dimensions)
 		{
-			dimensions = dim;
+			m_dimensions = dimensions;
 		}
 		void setDimensions    (float x, float y)
 		{
-			dimensions.x = x;
-			dimensions.y = y;
+			m_dimensions.x = x;
+			m_dimensions.y = y;
 		}
-		void setOffset        (const sf::Vector2f & off)
+		void setOffset        (const sf::Vector2f & offset)
 		{
-			offset = off;
+			m_offset = offset;
 		}
 		void setOffset        (float x, float y)
 		{
-			offset.x = x;
-			offset.y = y;
+			m_offset.x = x;
+			m_offset.y = y;
 		}
-		void setRowsAndColumns(const sf::Vector2u & rac)
+		void setRowsAndColumns(const sf::Vector2u & frameDistribution)
 		{
-			rowsAndColumns = rac;
+			m_frameDistribution = frameDistribution;
 		}
 		void setRowsAndColumns(std::size_t x, std::size_t y)
 		{
-			rowsAndColumns.x = x;
-			rowsAndColumns.y = y;
+			m_frameDistribution.x = x;
+			m_frameDistribution.y = y;
 		}
 		void setSpriteSheet   (const sf::Sprite & sprite)
 		{
-			spriteSheet = sprite;
+			m_spriteSheet = sprite;
 		}
 		void setRotation      (float angle)
 		{
-			spriteSheet.setRotation(angle);
+			m_spriteSheet.setRotation(angle);
 		}
 		void setColor         (const sf::Color & color)
 		{
-			spriteSheet.setColor(color);
+			m_spriteSheet.setColor(color);
 		}
 		// Utilities
 		std::size_t currentFrame      () const
 		{
-			return static_cast<std::size_t>((timer.getElapsedTime().asSeconds()) * fps) % getFrameCount();
+			return static_cast<std::size_t>((m_timer.getElapsedTime().asSeconds()) * m_fps) % getFrameCount();
 		}
 		std::size_t currentFrame      (sf::Time time) const
 		{
-			return static_cast<std::size_t>((time.asSeconds() * fps)) % getFrameCount();
+			return static_cast<std::size_t>((time.asSeconds() * m_fps)) % getFrameCount();
 		}
 		sf::IntRect currentTextureRect() const
 		{
 			std::size_t frame = currentFrame();
-			std::size_t x = frame % rowsAndColumns.x;
-			std::size_t y = (frame - x) / rowsAndColumns.x;
-			return sf::IntRect(static_cast<int>(start.x + x * dimensions.x + x * offset.x), static_cast<int>(start.y + y * dimensions.y + y * offset.y), static_cast<int>(dimensions.x), static_cast<int>(dimensions.y));
+			std::size_t x = frame % m_frameDistribution.x;
+			std::size_t y = (frame - x) / m_frameDistribution.x;
+			return sf::IntRect(static_cast<int>(m_start.x + x * m_dimensions.x + x * m_offset.x), static_cast<int>(m_start.y + y * m_dimensions.y + y * m_offset.y), static_cast<int>(m_dimensions.x), static_cast<int>(m_dimensions.y));
 		}
 		sf::IntRect currentTextureRect(sf::Time time) const
 		{
 			std::size_t frame = currentFrame(time);
-			std::size_t x = frame % rowsAndColumns.x;
-			std::size_t y = (frame - x) / rowsAndColumns.x;
-			return sf::IntRect(static_cast<int>(start.x + x * dimensions.x + x * offset.x), static_cast<int>(start.y + y * dimensions.y + y * offset.y), static_cast<int>(dimensions.x), static_cast<int>(dimensions.y));
+			std::size_t x = frame % m_frameDistribution.x;
+			std::size_t y = (frame - x) / m_frameDistribution.x;
+			return sf::IntRect(static_cast<int>(m_start.x + x * m_dimensions.x + x * m_offset.x), static_cast<int>(m_start.y + y * m_dimensions.y + y * m_offset.y), static_cast<int>(m_dimensions.x), static_cast<int>(m_dimensions.y));
 		}
 		sf::IntRect currentTextureRect(std::size_t frame) const
 		{
 			frame %= getFrameCount();
-			std::size_t x = frame % rowsAndColumns.x;
-			std::size_t y = (frame - x) / rowsAndColumns.x;
-			return sf::IntRect(static_cast<int>(start.x + x * dimensions.x + x * offset.x), static_cast<int>(start.y + y * dimensions.y + y * offset.y), static_cast<int>(dimensions.x), static_cast<int>(dimensions.y));
+			std::size_t x = frame % m_frameDistribution.x;
+			std::size_t y = (frame - x) / m_frameDistribution.x;
+			return sf::IntRect(static_cast<int>(m_start.x + x * m_dimensions.x + x * m_offset.x), static_cast<int>(m_start.y + y * m_dimensions.y + y * m_offset.y), static_cast<int>(m_dimensions.x), static_cast<int>(m_dimensions.y));
 		}
 		void        draw              (sf::RenderTarget & target, sf::RenderStates states = sf::RenderStates::Default) const
 		{
-			sf::Sprite sprite(spriteSheet);
+			sf::Sprite sprite(m_spriteSheet);
 			sprite.setTextureRect(currentTextureRect());
 			target.draw(sprite, states);
 		}
 		void        draw              (sf::RenderTarget & target, std::size_t frame, sf::RenderStates states = sf::RenderStates::Default) const
 		{
-			sf::Sprite sprite(spriteSheet);
+			sf::Sprite sprite(m_spriteSheet);
 			sprite.setTextureRect(currentTextureRect(frame));
 			target.draw(sprite, states);
 		}
 		void        draw              (sf::RenderTarget & target, sf::Time time, sf::RenderStates states = sf::RenderStates::Default) const
 		{
-			sf::Sprite sprite(spriteSheet);
+			sf::Sprite sprite(m_spriteSheet);
 			sprite.setTextureRect(currentTextureRect(time));
 			target.draw(sprite, states);
 		}
 		void        draw              (sf::RenderTarget & target, const sf::Vector2f & position, sf::RenderStates states = sf::RenderStates::Default) const
 		{
-			sf::Sprite sprite(spriteSheet);
+			sf::Sprite sprite(m_spriteSheet);
 			sprite.setPosition(position);
 			sprite.setTextureRect(currentTextureRect());
 			target.draw(sprite, states);
 		}
 		void        draw              (sf::RenderTarget & target, const sf::Vector2f & position, sf::Time time, sf::RenderStates states = sf::RenderStates::Default) const
 		{
-			sf::Sprite sprite(spriteSheet);
+			sf::Sprite sprite(m_spriteSheet);
 			sprite.setPosition(position);
 			sprite.setTextureRect(currentTextureRect(time));
 			target.draw(sprite, states);
 		}
 		void        draw              (sf::RenderTarget & target, const sf::Vector2f & position, std::size_t frame, sf::RenderStates states = sf::RenderStates::Default) const
 		{
-			sf::Sprite sprite(spriteSheet);
+			sf::Sprite sprite(m_spriteSheet);
 			sprite.setPosition(position);
 			sprite.setTextureRect(currentTextureRect(frame));
 			target.draw(sprite, states);

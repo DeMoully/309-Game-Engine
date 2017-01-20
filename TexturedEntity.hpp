@@ -23,14 +23,14 @@ namespace sfext
 		TexturedEntity() : Entity()
 		{
 		}
-		TexturedEntity(const Collidable & coll, const sf::Texture & txt, const sf::Vector2f & vel = sf::Vector2f()) : Entity(coll, vel), texture(txt)
+		TexturedEntity(const Collidable & collidable, const sf::Texture & txt, const sf::Vector2f & velocity = sf::Vector2f()) : Entity(collidable, velocity), texture(txt)
 		{
 		}
-		TexturedEntity(const Collidable & coll, const sf::Sprite & sprite, const sf::Vector2f & vel = sf::Vector2f()) : Entity(coll, vel)
+		TexturedEntity(const Collidable & collidable, const sf::Sprite & sprite, const sf::Vector2f & velocity = sf::Vector2f()) : Entity(collidable, velocity)
 		{
 			setTexture(sprite);
 		}
-		TexturedEntity(const Collidable & coll, const sf::Image & image, const sf::Vector2f & vel = sf::Vector2f()) : Entity(coll, vel)
+		TexturedEntity(const Collidable & collidable, const sf::Image & image, const sf::Vector2f & velocity = sf::Vector2f()) : Entity(collidable, velocity)
 		{
 			setTexture(image);
 		}
@@ -64,15 +64,17 @@ namespace sfext
 			texture.setRepeated(repeated);
 		}
 		// Utilities
+		virtual void updateVertices()
+		{
+			m_vertices[0] = sf::Vertex(m_collidable.getPosition(), sf::Vector2f(0.f, 0.f));
+			m_vertices[1] = sf::Vertex(m_collidable.getPosition() + sf::Vector2f(m_collidable.getDimensions().x, 0.f), sf::Vector2f(m_collidable.getDimensions().x, 0.f));
+			m_vertices[2] = sf::Vertex(m_collidable.getPosition() + m_collidable.getDimensions(), m_collidable.getDimensions());
+			m_vertices[3] = sf::Vertex(m_collidable.getPosition() + sf::Vector2f(0.f, m_collidable.getDimensions().y), sf::Vector2f(0.f, m_collidable.getDimensions().y));
+		}
 		virtual void draw(sf::RenderTarget & target, sf::RenderStates states = sf::RenderStates::Default) const
 		{
-			static sf::VertexArray vertices = sf::VertexArray(sf::Quads, 4);
 			states.texture = &texture;
-			vertices[0] = sf::Vertex(collidable.getPosition(), sf::Vector2f(0.f, 0.f));
-			vertices[1] = sf::Vertex(collidable.getPosition() + sf::Vector2f(collidable.getDimensions().x, 0.f), sf::Vector2f(collidable.getDimensions().x, 0.f));
-			vertices[2] = sf::Vertex(collidable.getPosition() + collidable.getDimensions(), collidable.getDimensions());
-			vertices[3] = sf::Vertex(collidable.getPosition() + sf::Vector2f(0.f, collidable.getDimensions().y), sf::Vector2f(0.f, collidable.getDimensions().y));
-			target.draw(vertices, states);
+			target.draw(m_vertices, states);
 		}
 	};
 }
